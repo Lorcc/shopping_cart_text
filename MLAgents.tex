@@ -19,7 +19,7 @@ Des Weiteren bietet ML-Agents einen einfachen Einstieg, da eine Menge an Beispie
 
 \subsection{Rewards}
 \label{rewards}
-Nach Betrachtung der Beispielszenen lässt sich für den Bereich der Rewards sagen, dass diese generell spärlich vergeben werden. Dies könnte an der geringen Komplexität der Beispielaufgaben liegen. Ein Projekt betrachtet, das Jonglieren eines Balles auf der oberen Ebene eines Würfels. Der Würfel ist hier der trainierte Agent, welcher sich um sein Zentrum so rotieren muss, dass der Ball nicht von der oberen Ebene herunterrollt. Für jeden Zeitschritt, in dem der Ball auf seinem „Kopf“ bleibt, bekommt der Agent eine kleine Belohnung. Sollte der Ball herunterfallen, bekommt er eine hohe Bestrafung. Die Vergabe von Rewards erfolgt mithilfe von Gleitkommazahlen. In dem eben beschriebenen Beispiel erhält der Agent +0.1 für jeden Zeitschritt, in dem der Ball nicht herunterrollt und -1.0, falls der Ball fällt. Belohnungen und Bestrafungen werden in dem Toolkit einheitlich als Reward bezeichnet. Darum wird das im Folgenden ebenso von mir benutzt. Generell gelten für die Vergabe von Rewards diese Ansätze:
+Nach Betrachtung der Beispielszenen lässt sich für den Bereich der Rewards sagen, dass diese generell spärlich vergeben werden. Dies könnte an der geringen Komplexität der Beispielaufgaben liegen. Ein Projekt betrachtet, das Balancieren eines Balles auf der oberen Ebene eines Würfels. Der Würfel ist hier der trainierte Agent, welcher sich um sein Zentrum so rotieren muss, dass der Ball nicht von der oberen Ebene herunterrollt. Für jeden Zeitschritt, in dem der Ball auf seinem „Kopf“ bleibt, bekommt der Agent eine kleine Belohnung. Sollte der Ball herunterfallen, bekommt er eine hohe Bestrafung. Die Vergabe von Rewards erfolgt mithilfe von Gleitkommazahlen. In dem eben beschriebenen Beispiel erhält der Agent +0.1 für jeden Zeitschritt, in dem der Ball nicht herunterrollt und -1.0, falls der Ball fällt. Belohnungen und Bestrafungen werden in dem Toolkit einheitlich als Reward bezeichnet. Darum wird das im Folgenden ebenso von mir benutzt. Generell gelten für die Vergabe von Rewards diese Ansätze:
 \\
 \begin{itemize}
 	\item Existenzabzüge, also das Verbleiben in einer ungewollten Situation 
@@ -58,7 +58,7 @@ Die Decision sind verhältnismäßig unkompliziert. Der Agent muss nach einer vo
 Die Actions werden in „Continuous Actions“ und „Discreate Branches“ unterschieden. Die „Continuous Actions“ können Werte zwischen -1 und 1 annehmen. Dagegen werden die Werte, die ein „Discreate Branch“ annehmen kann, durch seine Größe beeinflusst. Ein Branch der den Wert 3 besitzt, kann nur den Wert 0,1 oder 2 annehmen. Diese Werte werden dann im Code zu Bewegungs- oder Handlungsaktionen umgewandelt. Beispielsweise könnte hier -1 für volle Geschwindigkeit Rückwärts und 1 für volle Geschwindigkeit vorwärts stehen. Die Werte dazwischen reihen sich dann ein. Somit beschreiben diese Werte den Entscheidungsraum des Agenten. 
 
 \subsection{Trainingskonfiguration}
-Die Trainingskonfigurationen stellen einen der wichtigsten Aspekte des Trainingsprozesses dar. Sie bestimmen darüber, welcher Algorithmus zum Training verwendet wird. Des Weiteren können hier Einstellungen zum Aufbau des Gehirns getätigt werden. Wie hoch die Lernrate ist, wie schnell diese mit der Zeit abnimmt und vieles mehr. Die Anpassung der Werte innerhalb der Trainingskonfigurationen können einen massiven Einfluss auf das Ergebnis haben. 
+Die Trainingskonfigurationen stellen einen der wichtigsten Aspekte des Trainingsprozesses dar. Sie bestimmen darüber, welcher Algorithmus zum Training verwendet wird. Des Weiteren können hier Einstellungen zum Aufbau des neuronalen Netzes getätigt werden. Wie hoch die Lernrate ist, wie schnell diese mit der Zeit abnimmt und vieles mehr. Die Anpassung der Werte innerhalb der Trainingskonfigurationen können einen massiven Einfluss auf das Ergebnis haben. 
 \\
 Aber bevor ich auf die wichtigsten Parameter eingehe, zurück zum Anfang, um zu entscheiden welcher Lernalgorithmus verwendet wird. Das Toolkit liefert drei Reinforcement Learning Algorithmen mit sich. Hierzu gehören „Proximal Policy Optimisation“ (Abk.: PPO), Soft Actor-Critic (Abk.: SAC) und MultiAgent POsthumous Credit Assignment (Abk.: MA-POCA). 
 \\
@@ -66,9 +66,9 @@ Wie schon vom Namen abzuleiten ist, wird MA-POCA für Trainingsumgebungen verwen
 \\
 SAC trainiert mithilfe von aufgenommenen Erfahrungen, welche immer wieder abgespielt werden, wodurch dieser Algorithmus effizienter hinsichtlich der Trainingsdaten ist.\cite{sac}
 \\
-PPO wird eher für allgemeine Aufgaben verwendet und ist zuverlässiger.\cite{mapoca} Wegen der fehlenden Beispieldaten, welche erst den SAC-Algorithmus generiert werden müssten und der höheren Zuverlässigkeit, wird in diesem Projekt der PPO Lernalgorithmus verwendet.
+PPO wird eher für allgemeine Aufgaben verwendet und ist zuverlässiger.\cite{mapoca} Wegen der fehlenden Beispieldaten, welche erst für den SAC-Algorithmus generiert werden müssten und der höheren Zuverlässigkeit von PPO, wird in diesem Projekt der PPO Lernalgorithmus verwendet.
 \\
-
+Ein weiterer Betrachtungspunkt sind die Hyperparameter. In der Tab.\ref{tab:hyperparameter} sind die bedeutendsten Parameter einmal zusammengefasst und kurz erklärt. 
 \begin{table}[ht]
 \centering
 \resizebox{\textwidth}{!}{\begin{tabular}{ |c|c|c|c| }
@@ -97,8 +97,55 @@ PPO wird eher für allgemeine Aufgaben verwendet und ist zuverlässiger.\cite{ma
 	\hline
 \end{tabular}}
 \linebreak
-\caption[Zusammenfassung der wichtigsten Hyperparameter für PPO]{Frei übersetzte Zusammenfassung der wichtigsten Hyperparameter für PPO\cite{config_ppo}}
+\caption[Zusammenfassung der wichtigsten Hyperparameter für PPO]{Zusammenfassung der wichtigsten Hyperparameter für PPO frei übersetzt von \cite{config_ppo}}
 \label{tab:hyperparameter}
 \end{table}
+\noindent Anhand der Trainingsbeispiele und der ausführlichen Beschreibungen auf dem ML-Agents Github Repository\cite{config_ppo} können daraufhin Entscheidungen getroffen werden, wie diese Parameter für die jeweilige Aufgabe eingestellt werden sollten. Um das einmal an einem Parameter zu erklären, betrachten wir einmal den Gamma Wert. Dieser soll klein sein, wenn die richtige Handlung direkt zu einem Reward führt. Ein Beispiel hierfür ist die Basic Umgebung die ML-Agents mitliefert. Hier muss sich der Agent, wie in der Abb.\ref{fig:basic_example} zu sehen, nach links oder rechts bewegen, um ein optimales oder suboptimales Ziel zu erreichen. 
+\begin{figure} [ht]
+	\centering
+	\includegraphics[width=\linewidth,height=\textheight,keepaspectratio]{img/basic_example_environment}
+	\caption[Basic Umgebungsbeispiel von ML-Agents]{Screenshot der Basic Beispielumgebung von ML-Agents. Der Agent(blau) muss durch die Bewegung nach links oder rechts ein Ziel(die grünen Sphären) erreichen. Der Kontakt mit der großen Sphäre gibt dabei einen höheren Reward als die kleine Sphäre.}
+	\label{fig:basic_example}
+\end{figure}
+Wenn er beim Ziel ankommt, startet der Prozess von vorn. Die Startposition des Agenten sowie die Position der zwei Ziele ist immer gleich. Die Aufgabe ist sehr simpel und die Handlungen führen ohne Umweg zu einem Reward Signal. Deswegen wird hier der Gamma Wert niedrig gewählt. Das Lernen aus Beispielen ist nur eine Option die möglichst optimalen Werte zu finden. Ein anderer Ansatz wäre über Brute Force verschiedene Parametereinstellungen zu testen und die Ergebnisse zu vergleichen. Aus eigener Erfahrung führen suboptimale Hyperparameterwerte nicht dazu, dass der Agent keinen Fortschritt im Training macht. Meist fällt der Kumulative Reward nur etwas schlechter aus. Anders sieht das bei der Observation, der Reward Vergabe und den Aktionsparametern aus. Diese haben einen deutlich größeren Einfluss auf das Ergebnis und können bei suboptimalen Einstellungen bis zum Fehlschlag des Trainings führen. Mehr dazu im Kapitel Training im Wandel der Zeit.
+
 
 \subsection{Installation und Nutzung}
+Zum Start des Projekts war ML-Agent Release 20 die aktuellste Version, welche am 19.11.2022 veröffentlicht wurde. Der Installationsprozess kann im ML-Agents Github unter Installation\cite{mlagents_install} nachgelesen werden. Um ML-Agents nutzen zu können, sind folgende Schritte notwendig. Die Versionen in der Klammer beschreiben die verwendeten Versionen in diesem Projekt:
+\\
+\begin{itemize}
+	\item Unity 2021.3 oder höher installieren (2021.3.31f1 LTS) 
+	\item Python 3.8.13 oder höher installieren (3.9.13)
+	\item ML-Agent Github Repository klonen, um die Beispielszenen nutzen zu können (Optional)
+	\item Pytorch installieren (1.7.1)
+	\item mlagents Python Package installieren (0.30.0)
+	\item in Unity im Package Manager:
+	\begin{itemize}
+		\item Die package.json aus dem com.unity.mlagents Ordner hinzufügen
+		\item Die package.json aus dem com.unity.mlagents.extensions Order hinzufügen (Optional)
+		\item InputSystems Package im Projekt einbinden (Unity eigenes Package)
+	\end{itemize} 	 
+	\item Unter <ProjektPfad>Packages/manifest.json “com.unity.nuget.newtonsoft-json“: “3.0.1“ hinzufügen
+\end{itemize}
+Um zu testen, ob die Installation erfolgreich war, die Windows-Eingabeaufforderung im Projekt öffnen und die virtuelle Umgebung aktivieren. Danach den nächsten Befehl ausführen:
+\\
+\begin{lstlisting}[language=bash,numbers=none]
+	(venv) C:\PfadzumProjekt> mlagents-learn --help
+\end{lstlisting}
+\noindent
+\\
+Nun sollten mögliche Befehle, die die mlagents-learn.exe erlaubt dargestellt werden. Da die Übersichtlichkeit in der Eingabeconsole jedoch begrenzt ist, folgen ein paar Befehlsketten, die für dieses Projekt häufig genutzt wurden. Um den Lernprozess zu starten:
+\\
+\begin{lstlisting}[language=bash,numbers=none]
+	(venv) C:\PfadzumProjekt> mlagents-learn
+\end{lstlisting}
+\noindent
+\\
+Hierbei wird eine default ID erstellt und danach muss die Szene in Unity gestartet werden und der Agent trainiert mit den Standardwerten der Trainingskonfiguration. Für mehr Kontrolle wird der nachfolgende Befehl verwendet:
+\\
+\begin{lstlisting}[language=bash,numbers=none]
+	(venv) C:\PfadzumProjekt> mlagents-learn config(Position der Datei)\config.yaml(Dateiname) --run-id=ErstesTraining(ID)
+\end{lstlisting}
+\noindent
+\\
+Bei dieser Anweisung werden die Trainingskonfigurationen aus der config.yaml geladen und die Ergebnisse des Trainings werden in dem Ordner <ErstesTraining> gespeichert. Ml-Agents bittet noch viele weitere Befehlsketten an. So können alte Trainingsdaten überschreiben oder ein bereits trainiertes Modell verbessert werden, indem man von diesem aus, das Training startet. 
